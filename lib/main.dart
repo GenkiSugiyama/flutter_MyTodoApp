@@ -27,8 +27,24 @@ class TodoListPage extends StatelessWidget {
         leading: Icon(Icons.menu),
         title: const Text('Genki Todo List'),
       ),
-      body: Center(
-        child: Text('リスト一覧画面'),
+      body: ListView(
+        children: <Widget>[
+          Card(
+            child: ListTile(
+              title: Text("鞄回収"),
+            ),
+          ),
+          Card(
+            child: ListTile(
+              title: Text('財布の中身確認'),
+            ),
+          ),
+          Card(
+            child: ListTile(
+              title: Text('免許証確認'),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
