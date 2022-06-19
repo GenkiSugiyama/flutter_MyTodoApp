@@ -19,7 +19,14 @@ class MyTodoApp extends StatelessWidget {
 }
 
 // リスト一覧画面用Widget
-class TodoListPage extends StatelessWidget {
+class TodoListPage extends StatefulWidget {
+  @override
+  _TodoListPageState createState() => _TodoListPageState();
+}
+
+class _TodoListPageState extends State<TodoListPage> {
+  List<String> todoList = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,32 +34,29 @@ class TodoListPage extends StatelessWidget {
         leading: Icon(Icons.menu),
         title: const Text('Genki Todo List'),
       ),
-      body: ListView(
-        children: <Widget>[
-          Card(
+      body: ListView.builder(
+        itemCount: todoList.length,
+        itemBuilder: (context, index) {
+          return Card(
             child: ListTile(
-              title: Text("鞄回収"),
+              title: Text(todoList[index]),
             ),
-          ),
-          Card(
-            child: ListTile(
-              title: Text('財布の中身確認'),
-            ),
-          ),
-          Card(
-            child: ListTile(
-              title: Text('免許証確認'),
-            ),
-          ),
-        ],
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
+        // なんで新規追加画面移動用のボタン内で値を取ろうとするのかがわからない
+        onPressed: () async {
+          final newListText = await Navigator.of(context).push(
             MaterialPageRoute(builder: (context) {
               return TodoAddPage();
-            }),
+            })
           );
+          if(newListText != null) {
+            setState(() {
+              todoList.add(newListText);
+            });
+          }
         },
         child: Icon(Icons.add),
       ),
@@ -79,7 +83,7 @@ class _TodoAddPageState extends State<TodoAddPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextField(_text, style: TextStyle(color: Colors.blue)),
+            Text(_text, style: TextStyle(color: Colors.blue)),
             const SizedBox(height: 8),
             TextField(
               onChanged: (String value) {
